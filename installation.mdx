@@ -1,0 +1,100 @@
+---
+title: "Installation"
+description: "Install xcodes on your Mac using Homebrew, Mint, or a direct download."
+---
+
+<Note>
+  Homebrew is the preferred installation method. The Homebrew formula provides Developer ID-signed and notarized binaries, which means macOS Gatekeeper will trust them without any extra steps and you do not need Xcode already installed to use xcodes.
+</Note>
+
+## Homebrew (preferred)
+
+<Steps>
+  <Step title="Install via Homebrew">
+    ```bash
+    brew install xcodesorg/made/xcodes
+    ```
+  </Step>
+  <Step title="Verify the installation">
+    ```bash
+    xcodes version
+    ```
+  </Step>
+</Steps>
+
+## Download a release
+
+<Steps>
+  <Step title="Download the latest binary">
+    Download the latest release from the [GitHub releases page](https://github.com/XcodesOrg/xcodes/releases).
+
+    The release binaries are Developer ID-signed and do not require Xcode to already be installed.
+  </Step>
+  <Step title="Move the binary to your PATH">
+    ```bash
+    mv xcodes /usr/local/bin/xcodes
+    ```
+  </Step>
+  <Step title="Verify the installation">
+    ```bash
+    xcodes version
+    ```
+  </Step>
+</Steps>
+
+## Mint
+
+[Mint](https://github.com/yonaskolb/Mint) is a Swift package runner and installer.
+
+<Steps>
+  <Step title="Install via Mint">
+    ```bash
+    mint install XcodesOrg/xcodes
+    ```
+  </Step>
+  <Step title="Verify the installation">
+    ```bash
+    xcodes version
+    ```
+  </Step>
+</Steps>
+
+## Build from source
+
+<Warning>
+  Building from source requires Xcode 12 or later to be installed. This method is not suitable for setting up a Mac from scratch.
+</Warning>
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/XcodesOrg/xcodes
+    ```
+  </Step>
+  <Step title="Build and install">
+    <CodeGroup>
+
+    ```bash Standard install
+    cd xcodes
+    make install
+    ```
+
+    ```bash Custom prefix
+    cd xcodes
+    PREFIX=/your/install/directory make install
+    ```
+
+    </CodeGroup>
+
+    Use the custom prefix form if `/usr/local/bin` is not in your `PATH`.
+  </Step>
+  <Step title="Verify the installation">
+    ```bash
+    xcodes version
+    ```
+  </Step>
+</Steps>
+
+<Note>
+  If the build fails with an error mentioning `xcrun --sdk macosx --find xctest`, you need to select a version of Xcode first. Run `xcode-select --switch /Applications/Xcode.app` or choose a Command Line Tools option in Xcode's **Preferences → Locations** tab.
+</Note>

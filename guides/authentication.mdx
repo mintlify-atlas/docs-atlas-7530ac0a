@@ -1,0 +1,107 @@
+---
+title: "Authentication"
+description: "How xcodes authenticates with Apple to download Xcode versions."
+---
+
+xcodes requires an Apple ID to download Xcode from Apple's servers. The first time you run a command that requires a download, xcodes prompts you for your credentials interactively.
+
+## Apple ID credentials
+
+### Interactive login
+
+On first use, xcodes prompts for your Apple ID and password:
+
+```
+Apple ID: you@example.com
+Apple ID Password (you@example.com):
+```
+
+After a successful login, xcodes saves your password to the macOS Keychain under the service `com.robotsandpencils.xcodes` and remembers your Apple ID for future sessions.
+
+### Environment variables
+
+For non-interactive environments such as CI, set these environment variables instead of typing credentials at a prompt:
+
+| Variable | Description |
+| --- | --- |
+| `XCODES_USERNAME` | Your Apple ID email address |
+| `XCODES_PASSWORD` | Your Apple ID password |
+
+```bash
+export XCODES_USERNAME="you@example.com"
+export XCODES_PASSWORD="your-password"
+xcodes install 16.2
+```
+
+Setting `XCODES_USERNAME` also lets you switch Apple IDs without clearing stored credentials.
+
+### Two-factor authentication
+
+If your Apple ID has two-factor authentication enabled, xcodes prompts you to enter the 6-digit code after your password is accepted:
+
+```
+Enter the 6-digit code you received at …: 
+```
+
+2FA prompts are interactive and cannot be bypassed via environment variables. For fully unattended CI, consider using fastlane spaceship authentication (see below).
+
+### Signing out
+
+To clear stored credentials from the Keychain and reset the remembered Apple ID:
+
+```bash
+xcodes signout
+```
+
+## Fastlane spaceship authentication
+
+xcodes supports authentication via a fastlane spaceship session cookie as an alternative to Apple ID login. This is useful in CI environments where interactive 2FA is not possible.
+
+<Steps>
+  <Step title="Generate a session with fastlane">
+    Run `fastlane spaceauth -u you@example.com` on a machine where you can complete 2FA. Copy the resulting session cookie string.
+  </Step>
+  <Step title="Set the FASTLANE_SESSION environment variable">
+    ```bash
+    export FASTLANE_SESSION="---\n- !ruby/object:HTTP::Cookie ..."
+    ```
+  </Step>
+  <Step title="Pass --use-fastlane-auth to xcodes">
+    ```bash
+    xcodes install 16.2 --use-fastlane-auth
+    ```
+
+    To use a saved session file for a specific user instead of the environment variable:
+
+    ```bash
+    xcodes install 16.2 --use-fastlane-auth --fastlane-user you@example.com
+    ```
+  </Step>
+</Steps>
+
+The `--use-fastlane-auth` flag is available on both `install` and `download` commands.
+
+## Data sources
+
+xcodes can fetch the list of available Xcode versions from two sources, controlled by the `--data-source` flag:
+
+<AccordionGroup>
+  <Accordion title="xcodeReleases (default)">
+    Uses data from [xcodereleases.com](https://xcodereleases.com) — a curated, well-structured list of Xcode releases. It is less likely to break if Apple redesigns their developer website and includes extra metadata not available from Apple directly.
+
+    ```bash
+    xcodes list --data-source xcodeReleases
+    ```
+  </Accordion>
+  <Accordion title="apple">
+    Scrapes the Apple Developer website directly. Always reflects the latest available releases, but is more fragile.
+
+    ```bash
+    xcodes list --data-source apple
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+If xcodes returns a `403 Unauthorized` error when downloading, you may need to accept updated Apple Developer Program Terms and Conditions. Visit [developer.apple.com](https://developer.apple.com) and accept any pending agreements, then try again.
+</Note>

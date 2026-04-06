@@ -1,0 +1,28 @@
+---
+title: "signout"
+description: "Clear the stored Apple ID credentials."
+---
+
+## Synopsis
+
+```bash
+xcodes signout [options]
+```
+
+Remove the stored Apple ID username and password used to authenticate with Apple's developer services.
+
+## Options
+
+| Flag | Description |
+|------|-------------|
+| `--color` / `--no-color` | Enable or disable colored output. |
+
+## Example
+
+```bash
+xcodes signout
+```
+
+<Note>
+  Your Apple ID password is stored securely in the macOS Keychain. Running `xcodes signout` removes it from the Keychain. Your stored Apple ID username preference is also cleared. You will be prompted to sign in again the next time xcodes needs to authenticate.
+</Note>

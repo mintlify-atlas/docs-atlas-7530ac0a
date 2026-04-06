@@ -1,0 +1,49 @@
+---
+title: "select"
+description: "Change the selected Xcode version."
+---
+
+## Synopsis
+
+```bash
+xcodes select [<version-or-path>] [options]
+```
+
+Select a version of Xcode by specifying a version number or an absolute path. Run without arguments to select the version specified in your `.xcode-version` file. If no version file is found, you will be prompted to interactively select from a list.
+
+Selecting an Xcode version runs `xcode-select --switch` under the hood, which requires superuser privileges.
+
+## Options
+
+| Flag | Description |
+|------|-------------|
+| `[version-or-path]` | The Xcode version number (e.g. `16.2`) or absolute path (e.g. `/Applications/Xcode-16.2.app`) to select. Omit to use your `.xcode-version` file or to pick interactively. |
+| `-p`, `--print-path` | Print the path of the currently selected Xcode without switching. |
+| `--directory <path>` | Directory to search for installed Xcode versions. Defaults to `/Applications`. Also reads the `XCODES_DIRECTORY` environment variable. |
+| `--color` / `--no-color` | Enable or disable colored output. |
+
+## Examples
+
+<CodeGroup>
+
+```bash Select interactively (or use .xcode-version)
+xcodes select
+```
+
+```bash Select by version number
+xcodes select 16.2
+```
+
+```bash Select by absolute path
+xcodes select /Applications/Xcode-16.2.app
+```
+
+```bash Print the path of the selected Xcode
+xcodes select -p
+```
+
+</CodeGroup>
+
+<Note>
+  If a `.xcode-version` file is present in the current working directory, running `xcodes select` without arguments will switch to the version it specifies. This is useful for enforcing a consistent Xcode version across a team. See the [`.xcode-version` guide](/guides/xcode-version-file) for details.
+</Note>

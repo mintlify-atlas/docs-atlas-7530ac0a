@@ -1,97 +1,68 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "xcodes"
+description: "The best command-line tool to install and switch between multiple versions of Xcode."
 ---
 
-## Setting up
+xcodes makes it simple to manage every version of Xcode on your Mac — from stable releases to betas and GM seeds — all from a single command-line tool. No more manual downloads, no more dragging `.xip` files, no more guessing which Xcode is selected.
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Install xcodes via Homebrew, Mint, or from a release binary in minutes.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Install your first Xcode version and switch between them in seconds.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Command Reference" icon="terminal" href="/commands/install">
+    Every command, flag, and option — documented with real examples.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Guides" icon="book-open" href="/guides/authentication">
+    Authentication, faster downloads, CI setup, and the `.xcode-version` file.
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## What xcodes does
 
-Everything you need to create world-class documentation.
+<CardGroup cols={2}>
+  <Card title="Install any Xcode version" icon="box-archive">
+    Install stable releases, betas, GM seeds, and release candidates by version number.
+  </Card>
+  <Card title="Switch instantly" icon="arrows-rotate">
+    Use `xcodes select` to switch the active Xcode globally, or read from a `.xcode-version` file.
+  </Card>
+  <Card title="Fast downloads" icon="bolt">
+    Uses aria2 with up to 16 parallel connections for downloads 3–5x faster than a browser.
+  </Card>
+  <Card title="Simulator runtimes" icon="mobile">
+    Download and install iOS, watchOS, tvOS, and visionOS simulator runtimes alongside Xcode.
+  </Card>
+</CardGroup>
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+## Get started in 30 seconds
 
-## Need inspiration?
+<Steps>
+  <Step title="Install xcodes">
+    ```bash
+    brew install xcodesorg/made/xcodes
+    ```
+  </Step>
+  <Step title="List available Xcode versions">
+    ```bash
+    xcodes list
+    ```
+  </Step>
+  <Step title="Install the version you need">
+    ```bash
+    xcodes install 16.2
+    ```
+    You'll be prompted for your Apple ID on first run. Credentials are stored securely in your keychain.
+  </Step>
+  <Step title="Switch between versions">
+    ```bash
+    xcodes select 16.2
+    ```
+  </Step>
+</Steps>
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+<Tip>
+  Add a `.xcode-version` file to your repository so that every team member and CI machine uses the same Xcode version automatically. See the [`.xcode-version` guide](/guides/xcode-version-file) for details.
+</Tip>

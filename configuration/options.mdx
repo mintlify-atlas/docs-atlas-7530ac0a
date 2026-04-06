@@ -1,0 +1,132 @@
+---
+title: "Configuration options"
+description: "Environment variables and global flags that control xcodes behavior."
+---
+
+## Environment variables
+
+Set these in your shell profile or CI environment to avoid interactive prompts.
+
+| Variable | Description | Default |
+|---|---|---|
+| `XCODES_USERNAME` | Apple ID username for authentication | Prompted interactively |
+| `XCODES_PASSWORD` | Apple ID password for authentication | Prompted interactively, then stored in Keychain |
+| `XCODES_DIRECTORY` | Default directory where Xcode versions are installed | `/Applications` |
+| `NO_COLOR` | Disable colored output when set to any value | — |
+| `TERM=dumb` | Also disables colored output | — |
+
+After first sign-in, xcodes saves your Apple ID for future use. To switch accounts, set `XCODES_USERNAME` or run `xcodes signout` and re-authenticate.
+
+## Global flags
+
+These flags are available on most commands.
+
+### `--directory <path>`
+
+Override the Xcode installation directory. Equivalent to setting `XCODES_DIRECTORY`.
+
+```bash
+xcodes install 15.4 --directory /Volumes/ExternalDrive
+```
+
+All commands that operate on installed versions — `select`, `uninstall`, `installed` — accept this flag so you can manage Xcode versions outside `/Applications`.
+
+### `--data-source <source>`
+
+Controls where xcodes fetches the list of available Xcode versions. Accepted values:
+
+- **`xcodeReleases`** (default) — uses [xcodereleases.com](https://xcodereleases.com), well-formed data with extra metadata; more stable
+- **`apple`** — scrapes the Apple Developer website directly; always shows the latest releases but more fragile
+
+```bash
+xcodes list --data-source apple
+xcodes install 15.4 --data-source xcodeReleases
+```
+
+### `--color` / `--no-color`
+
+Enable or disable colored terminal output. Coloring is automatically disabled when xcodes is not running in an interactive terminal, when `NO_COLOR` is set, or when `TERM` is set to `dumb`.
+
+```bash
+xcodes list --no-color
+```
+
+## Download flags
+
+Available on the `install` and `download` commands.
+
+### `--aria2 <path>`
+
+Path to an `aria2c` executable. By default, xcodes searches `$PATH` for `aria2c` and uses it automatically if found. Use this flag to point to a specific installation.
+
+```bash
+xcodes install 15.4 --aria2 /opt/homebrew/bin/aria2c
+```
+
+### `--no-aria2`
+
+Disable aria2 even if it is available in `$PATH`. xcodes falls back to URLSession.
+
+```bash
+xcodes install 15.4 --no-aria2
+```
+
+### `--experimental-unxip`
+
+Enable faster `.xip` extraction using an alternative unxip implementation. Requires macOS 11 or later. Can be up to 2–3x faster than the default method.
+
+```bash
+xcodes install 15.4 --experimental-unxip
+```
+
+## Install-specific flags
+
+Available on the `install` command only.
+
+### `--no-superuser`
+
+Skip the post-installation steps that require root access: enabling developer mode, accepting the Xcode license, and installing additional components. Xcode is still installed, but you may be prompted on first launch to complete these steps.
+
+```bash
+xcodes install 15.4 --no-superuser
+```
+
+### `--empty-trash`
+
+Permanently delete the `.xip` archive after installation instead of moving it to the Trash. Use this on systems with limited disk space.
+
+```bash
+xcodes install 15.4 --empty-trash
+```
+
+### `--select`
+
+Automatically select the newly installed Xcode version after installation completes.
+
+```bash
+xcodes install 15.4 --select
+```
+
+## Configuration file
+
+xcodes stores a small JSON configuration file at:
+
+```
+~/Library/Application Support/xcodes/configuration.json
+```
+
+This file is managed automatically. It currently stores:
+
+- `defaultUsername` — your Apple ID, saved after first successful sign-in
+
+You do not need to edit this file manually. To change your Apple ID, set `XCODES_USERNAME` or run `xcodes signout`.
+
+## Archive cache
+
+Downloaded `.xip` archives are cached at:
+
+```
+~/Library/Application Support/xcodes/
+```
+
+If a matching archive already exists there, xcodes skips the download and uses the cached file. You can safely delete archives from this directory to free disk space.

@@ -1,0 +1,63 @@
+---
+title: "download"
+description: "Download a specific version of Xcode without installing it."
+---
+
+## Synopsis
+
+```bash
+xcodes download [<version>] [options]
+```
+
+Download a specific version of Xcode to disk without installing it. By default, xcodes uses a `URLSession` to download the specified version. If [aria2](https://aria2.github.io) is installed (available via Homebrew), it will be used automatically for faster downloads using up to 16 parallel connections.
+
+The downloaded `.xip` file can later be installed using `xcodes install --path <path>`.
+
+## Options
+
+| Flag | Description |
+|------|-------------|
+| `<version>` | The Xcode version to download. Accepts release versions (`16.2`), betas (`11 Beta 7`), and GM seeds (`11.2 GM seed`). |
+| `--latest` | Update the list and download the latest release version. |
+| `--latest-prerelease` | Update the list and download the latest prerelease version, including GM seeds and GMs. |
+| `--aria2 <path>` | Path to an `aria2` executable. Searches `$PATH` by default. |
+| `--no-aria2` | Disable `aria2` even if it is available. |
+| `--directory <path>` | Directory to download Xcode into. Defaults to `~/Downloads`. |
+| `--use-fastlane-auth` | Authenticate using a fastlane spaceship session. |
+| `--fastlane-user <user>` | The fastlane spaceship username to use. |
+| `--data-source <source>` | Source for available Xcode versions. One of `apple` or `xcodeReleases`. Defaults to `xcodeReleases`. |
+| `--color` / `--no-color` | Enable or disable colored output. |
+
+<Note>
+  If `aria2` is installed and available in `$PATH`, xcodes uses it automatically to download Xcode up to 3–5x faster using up to 16 parallel connections. Install it with `brew install aria2`. To opt out, pass `--no-aria2`.
+</Note>
+
+## Examples
+
+<CodeGroup>
+
+```bash Download a release version
+xcodes download 16.2
+```
+
+```bash Download a beta
+xcodes download "11 Beta 7"
+```
+
+```bash Download the latest prerelease
+xcodes download --latest-prerelease
+```
+
+```bash Download to a specific directory
+xcodes download 16.2 --directory ~/Archive
+```
+
+</CodeGroup>
+
+<Tip>
+  After downloading, install from the local file using:
+
+  ```bash
+  xcodes install 16.2 --path ~/Downloads/Xcode_16.2.xip
+  ```
+</Tip>

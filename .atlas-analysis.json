@@ -1,0 +1,90 @@
+{
+  "projectType": "cli-tool",
+  "projectName": "xcodes",
+  "projectDescription": "A macOS command-line tool for installing, managing, and switching between multiple versions of Xcode and simulator runtimes.",
+  "theme": "palm",
+  "primaryColor": "#585858",
+  "lightColor": "#3d3d3d",
+  "darkColor": "#b5b5b5",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Command Reference",
+            "pages": [
+              "commands/install",
+              "commands/download",
+              "commands/list",
+              "commands/select",
+              "commands/uninstall",
+              "commands/runtimes",
+              "commands/update",
+              "commands/signout"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/xcode-version-file",
+              "guides/authentication",
+              "guides/faster-downloads",
+              "guides/shell-completions",
+              "guides/ci-environments"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "configuration/options",
+              "configuration/troubleshooting"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Install any version of Xcode by version number, including betas and GM seeds",
+    "Switch between installed Xcode versions using the select command",
+    "Fast downloads via aria2 with up to 16 parallel connections (3-5x faster)",
+    "Experimental unxip for up to 70% faster archive extraction",
+    "Install and manage iOS, watchOS, tvOS, and other simulator runtimes",
+    "Keychain-based Apple ID credential storage",
+    "Support for .xcode-version file for reproducible CI environments",
+    "Shell completion scripts for Zsh, Bash, and Fish",
+    "Fastlane spaceship session authentication support",
+    "Security verification via code signing and Gatekeeper assessment"
+  ],
+  "publicApiSurface": [
+    "xcodes install <version>",
+    "xcodes install --latest",
+    "xcodes install --latest-prerelease",
+    "xcodes install --path <path>",
+    "xcodes download <version>",
+    "xcodes list",
+    "xcodes installed",
+    "xcodes select [version|path]",
+    "xcodes select --print-path",
+    "xcodes uninstall <version>",
+    "xcodes runtimes",
+    "xcodes runtimes install <runtime>",
+    "xcodes runtimes download <runtime>",
+    "xcodes update",
+    "xcodes version",
+    "xcodes signout",
+    "XCODES_USERNAME environment variable",
+    "XCODES_PASSWORD environment variable",
+    "XCODES_DIRECTORY environment variable",
+    ".xcode-version file"
+  ]
+}

@@ -1,0 +1,32 @@
+---
+title: "update"
+description: "Update the list of available Xcode versions."
+---
+
+## Synopsis
+
+```bash
+xcodes update [options]
+```
+
+Refresh the locally cached list of available Xcode versions from the configured data source and print the result.
+
+xcodes caches the list of available versions to avoid unnecessary network requests. The [`list`](/commands/list) and [`install`](/commands/install) commands also refresh this cache automatically when it may be stale. Run `xcodes update` explicitly if you want to force a refresh at any time.
+
+## Options
+
+| Flag | Description |
+|------|-------------|
+| `--directory <path>` | Directory to check for installed Xcode versions. Defaults to `/Applications`. Also reads the `XCODES_DIRECTORY` environment variable. |
+| `--data-source <source>` | Source for available Xcode versions. One of `apple` or `xcodeReleases`. Defaults to `xcodeReleases`. |
+| `--color` / `--no-color` | Enable or disable colored output. |
+
+## Example
+
+```bash
+xcodes update
+```
+
+<Tip>
+  You rarely need to run `xcodes update` manually. The `list` and `install` commands detect when the cache might be stale and update it automatically before proceeding.
+</Tip>

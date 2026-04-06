@@ -1,0 +1,76 @@
+---
+title: ".xcode-version file"
+description: "Declare the Xcode version your project requires to ensure reproducible builds across teams and CI."
+---
+
+The `.xcode-version` file is a plain text file containing a single Xcode version string. Committing it to your repository ensures that every developer and CI machine uses exactly the same Xcode version to build your project — similar to how `.ruby-version` pins a Ruby version for a project.
+
+## Creating the file
+
+Create a file named `.xcode-version` in the same directory as your Xcode project or workspace file. The file contains one line: the Xcode version string.
+
+<Warning>
+The filename must be exactly `.xcode-version` — no variations are supported.
+</Warning>
+
+### Stable releases
+
+```txt .xcode-version
+16.2
+```
+
+```txt .xcode-version
+13.4.1
+```
+
+### Prerelease versions
+
+Beta and release candidate identifiers are also supported:
+
+```txt .xcode-version
+14.0b6
+```
+
+```txt .xcode-version
+12.1 GM
+```
+
+The file may or may not end with a trailing newline — xcodes strips whitespace automatically.
+
+## How xcodes uses it
+
+**`xcodes select` with no arguments** reads `.xcode-version` and switches to that version:
+
+```bash
+xcodes select
+```
+
+If the file is not found, xcodes falls back to an interactive prompt.
+
+**`xcodes install` with no version argument** reads `.xcode-version` and installs that version:
+
+```bash
+xcodes install
+```
+
+## Committing the file
+
+Add `.xcode-version` to version control so it travels with your repository:
+
+```bash
+git add .xcode-version
+git commit -m "Pin Xcode version"
+```
+
+## Compatibility
+
+The `.xcode-version` file is a shared standard across the iOS tooling ecosystem. It is also supported by:
+
+- **fastlane** — the `xcversion` action reads `.xcode-version` automatically
+- **xcode-install** — the Ruby gem that popularized the format
+
+Any tool can read it regardless of implementation language.
+
+<Warning>
+Avoid pinning beta or prerelease versions in `.xcode-version`. Apple periodically removes prerelease builds from its servers, making them impossible to download and breaking reproducibility. Use a stable release version whenever possible.
+</Warning>

@@ -1,0 +1,101 @@
+---
+title: "runtimes"
+description: "List, download, and install simulator runtimes."
+---
+
+## Synopsis
+
+```bash
+xcodes runtimes [options]
+xcodes runtimes install <runtime> [options]
+xcodes runtimes download <runtime> [options]
+```
+
+Manage simulator runtimes for use with Xcode. The `runtimes` command lists available runtimes. Use the `install` and `download` subcommands to download and install specific runtimes.
+
+## Subcommands
+
+<AccordionGroup>
+  <Accordion title="xcodes runtimes" defaultOpen>
+    List all available simulator runtimes. Installed and bundled runtimes are marked in the output.
+
+    | Flag | Description |
+    |------|-------------|
+    | `--include-betas` | Include beta runtimes in the list. |
+    | `--color` / `--no-color` | Enable or disable colored output. |
+
+    **Sample output:**
+
+    ```
+    -- iOS --
+    iOS 16.4
+    iOS 17.0
+    iOS 17.2 (Bundled with selected Xcode)
+    iOS 17.4
+    iOS 18.2 (Installed)
+
+    -- watchOS --
+    watchOS 10.0
+    watchOS 11.0
+    ```
+  </Accordion>
+
+  <Accordion title="xcodes runtimes install">
+    Download and install a specific simulator runtime.
+
+    | Flag | Description |
+    |------|-------------|
+    | `<runtime>` | The runtime to install (e.g. `"iOS 17.0"`, `"iOS 17.0-beta1"`). |
+    | `--aria2 <path>` | Path to an `aria2` executable. Searches `$PATH` by default. |
+    | `--no-aria2` | Disable `aria2` even if it is available. |
+    | `--directory <path>` | Directory to download the runtime archive to. Defaults to `~/Downloads`. |
+    | `--keep-archive` | Do not delete the runtime archive after installation finishes. |
+    | `--color` / `--no-color` | Enable or disable colored output. |
+  </Accordion>
+
+  <Accordion title="xcodes runtimes download">
+    Download a specific simulator runtime without installing it.
+
+    | Flag | Description |
+    |------|-------------|
+    | `<runtime>` | The runtime to download (e.g. `"watchOS 11.0"`). |
+    | `--aria2 <path>` | Path to an `aria2` executable. Searches `$PATH` by default. |
+    | `--no-aria2` | Disable `aria2` even if it is available. |
+    | `--directory <path>` | Directory to download the runtime archive to. Defaults to `~/Downloads`. |
+    | `--color` / `--no-color` | Enable or disable colored output. |
+  </Accordion>
+</AccordionGroup>
+
+## Examples
+
+<CodeGroup>
+
+```bash List available runtimes
+xcodes runtimes
+```
+
+```bash List including betas
+xcodes runtimes --include-betas
+```
+
+```bash Install a runtime
+xcodes runtimes install "iOS 17.0"
+```
+
+```bash Install a beta runtime
+xcodes runtimes install "iOS 17.0-beta1"
+```
+
+```bash Download a runtime without installing
+xcodes runtimes download "watchOS 11.0"
+```
+
+</CodeGroup>
+
+<Warning>
+  Runtimes bundled with Xcode 16.1 and later use a new cryptex format. These runtimes are installed via `xcodebuild` and require the currently selected Xcode to be version 16.1 or later. Make sure the correct Xcode is selected before installing runtimes.
+</Warning>
+
+<Note>
+  If `aria2` is installed and available in `$PATH`, xcodes uses it automatically to download runtimes up to 3–5x faster. Install it with `brew install aria2`. To opt out, pass `--no-aria2`.
+</Note>

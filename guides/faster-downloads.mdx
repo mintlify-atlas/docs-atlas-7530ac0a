@@ -1,0 +1,73 @@
+---
+title: "Faster downloads"
+description: "Use aria2 for 3–5x faster Xcode downloads with parallel connections."
+---
+
+xcodes offers two ways to speed up Xcode downloads: aria2 for parallel downloading, and an experimental fast extraction flag for the `.xip` archive.
+
+## aria2
+
+By default, xcodes uses `URLSession` to download Xcode. If [aria2](https://aria2.github.io) is installed, xcodes detects it automatically and uses it instead. aria2 opens up to 16 parallel connections, making downloads 3–5x faster than a single connection.
+
+### Install aria2
+
+```bash
+brew install aria2
+```
+
+Once aria2 is in your `PATH`, xcodes uses it for every subsequent download — no extra configuration needed.
+
+### Custom aria2 path
+
+If aria2 is not in your `PATH`, specify its location explicitly:
+
+```bash
+xcodes install 16.2 --aria2 /path/to/aria2c
+```
+
+### Disable aria2
+
+If aria2 is installed but you want to use `URLSession` for a specific download:
+
+```bash
+xcodes install 16.2 --no-aria2
+```
+
+## Experimental fast extraction
+
+The `--experimental-unxip` flag uses an embedded port of [saagarjha/unxip](https://github.com/saagarjha/unxip) to extract `.xip` archives up to 70% faster than the default `xip` tool.
+
+```bash
+xcodes install --latest --experimental-unxip
+```
+
+<Warning>
+`--experimental-unxip` requires macOS 11 or later. If you encounter any issues during extraction, remove the flag and retry without it.
+</Warning>
+
+## Resuming interrupted downloads
+
+xcodes handles interrupted downloads gracefully:
+
+- **URLSession**: xcodes saves resume data so that a partial download can continue from where it left off rather than starting over.
+- **aria2**: checks for an existing `.aria2` metadata file alongside a partial download and resumes from that position automatically.
+- **Cached archives**: if a `.xip` file for the requested version already exists in `~/Library/Application Support/xcodes/`, xcodes uses it instead of downloading again.
+
+## Examples
+
+```bash
+# Install aria2 first
+brew install aria2
+
+# xcodes now uses aria2 automatically
+xcodes install 16.2
+
+# Combine aria2 with fast extraction
+xcodes install --latest --experimental-unxip
+
+# Disable aria2 for a specific install
+xcodes install 16.2 --no-aria2
+
+# Use aria2 at a custom path
+xcodes install 16.2 --aria2 /opt/homebrew/bin/aria2c
+```

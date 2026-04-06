@@ -1,0 +1,49 @@
+---
+title: "uninstall"
+description: "Uninstall a specific version of Xcode."
+---
+
+## Synopsis
+
+```bash
+xcodes uninstall [<version>] [options]
+```
+
+Uninstall a version of Xcode. By default, the Xcode application is moved to the Trash. Use `--empty-trash` to permanently delete it instead.
+
+Run without arguments to interactively select from a list of installed versions.
+
+## Options
+
+| Flag | Description |
+|------|-------------|
+| `[version]` | The version to uninstall (e.g. `16.1`). Omit to pick interactively from installed versions. |
+| `--empty-trash` | Permanently delete Xcode instead of moving it to the Trash. |
+| `--directory <path>` | Directory to search for installed Xcode versions. Defaults to `/Applications`. Also reads the `XCODES_DIRECTORY` environment variable. |
+| `--color` / `--no-color` | Enable or disable colored output. |
+
+## Examples
+
+<CodeGroup>
+
+```bash Uninstall interactively
+xcodes uninstall
+```
+
+```bash Uninstall a specific version
+xcodes uninstall 16.1
+```
+
+```bash Uninstall and permanently delete
+xcodes uninstall 16.1 --empty-trash
+```
+
+</CodeGroup>
+
+<Note>
+  If the uninstalled version was the currently selected Xcode, xcodes automatically switches the selection to the latest remaining installed version.
+</Note>
+
+<Warning>
+  Using `--empty-trash` permanently deletes the Xcode application. This cannot be undone. Omit this flag to keep a copy in the Trash until you empty it manually.
+</Warning>

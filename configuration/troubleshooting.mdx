@@ -1,0 +1,171 @@
+---
+title: "Troubleshooting"
+description: "Solutions to common issues with xcodes."
+---
+
+<AccordionGroup>
+
+  <Accordion title="403 Unauthorized error">
+    **Cause:** Apple Developer Terms and Conditions have not been accepted, or your Apple ID authorization was revoked.
+
+    **Fix:**
+
+    1. Visit [developer.apple.com](https://developer.apple.com) and sign in with your Apple ID.
+    2. Accept any pending Terms and Conditions.
+    3. Sign out of xcodes and re-authenticate:
+
+    ```bash
+    xcodes signout
+    xcodes install <version>
+    ```
+
+    <Note>
+      This can also happen if Apple revokes your session — for example, after a password change or a security event on your account.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Damaged XIP / archive is damaged and can't be expanded">
+    xcodes automatically detects a damaged archive, removes it, and retries the download once.
+
+    If the error happens again:
+
+    - Try passing `--no-aria2` to rule out a corrupted partial download from aria2:
+
+      ```bash
+      xcodes install <version> --no-aria2
+      ```
+
+    - Or delete the cached archive manually and retry:
+
+      ```bash
+      rm ~/Library/Application\ Support/xcodes/Xcode-<version>.xip
+      xcodes install <version>
+      ```
+
+    <Tip>
+      If you provided a local `.xip` with `--path`, xcodes will not attempt to recover. Delete the file and re-download it.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Version not found / unavailable version error">
+    xcodes could not find the requested version in the cached list.
+
+    **Steps to resolve:**
+
+    1. Refresh the list of available versions:
+
+       ```bash
+       xcodes update
+       ```
+
+    2. Try both data sources to see if the version appears:
+
+       ```bash
+       xcodes list --data-source apple
+       xcodes list --data-source xcodeReleases
+       ```
+
+    3. Make sure the version string matches exactly. Version strings are space-sensitive:
+
+       ```bash
+       xcodes install "11 Beta 7"    # correct
+       xcodes install "11.0 Beta 7"  # incorrect
+       ```
+  </Accordion>
+
+  <Accordion title='Build from source error: "terminated(72): xcrun --sdk macosx --find xctest"'>
+    This error occurs when building xcodes from source and no Xcode version is selected as the active developer tools.
+
+    **Fix:** Select an installed Xcode version before building:
+
+    ```bash
+    sudo xcode-select --switch /Applications/Xcode.app
+    ```
+
+    Alternatively, open Xcode and go to **Settings > Locations**, then choose a version under **Command Line Tools**.
+  </Accordion>
+
+  <Accordion title="Password prompt in CI / automation">
+    xcodes prompts for credentials interactively by default. In CI environments, set environment variables instead:
+
+    ```bash
+    export XCODES_USERNAME="your@apple.id"
+    export XCODES_PASSWORD="your-password"
+    xcodes install <version>
+    ```
+
+    Alternatively, use a fastlane spaceship session with the `--use-fastlane-auth` flag:
+
+    ```bash
+    xcodes install <version> --use-fastlane-auth
+    ```
+
+    <Warning>
+      Avoid hardcoding credentials in scripts or committing them to version control. Use your CI provider's secrets management to inject these environment variables securely.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Failed security assessment after installation">
+    After installation, xcodes verifies Xcode with Gatekeeper (`spctl`) and checks its code signing identity. If this check fails, you will see an error like:
+
+    ```
+    Xcode X.Y failed its security assessment...
+    It remains installed at /Applications/Xcode-X.Y.app if you wish to use it anyways.
+    ```
+
+    Xcode is still installed and usable. This can happen with beta versions that have not yet been notarized.
+
+    **To open the app for the first time:**
+
+    1. In Finder, navigate to `/Applications`.
+    2. Right-click the Xcode app and choose **Open**.
+    3. Confirm you want to open it in the dialog that appears.
+  </Accordion>
+
+  <Accordion title="Slow downloads">
+    By default, xcodes downloads using URLSession with a single connection. Installing aria2 enables multi-connection downloads that are 3–5x faster:
+
+    ```bash
+    brew install aria2
+    ```
+
+    xcodes detects aria2 automatically once it is in your `$PATH`. You can verify it is being used by the `Downloading with aria2` message at the start of a download.
+
+    <Tip>
+      On slow or unreliable connections, URLSession (without aria2) supports resuming interrupted downloads using persisted resume data.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Installation requires a password even with --no-superuser">
+    `--no-superuser` skips the optional post-installation steps that require root: enabling developer mode, accepting the Xcode license, and installing package components. It does not bypass the password prompt for those steps — it skips the steps entirely.
+
+    Xcode will still work after installation, but you may be prompted to complete these steps on first launch.
+
+    If you want a fully unattended installation without any interactive prompts, combine `--no-superuser` with the `XCODES_USERNAME` and `XCODES_PASSWORD` environment variables.
+  </Accordion>
+
+  <Accordion title="Selected Xcode reverted after uninstall">
+    If you uninstall the currently selected Xcode, xcodes automatically selects the latest remaining installed version to prevent tools like `xcodebuild` from breaking.
+
+    To choose a specific version after uninstalling:
+
+    ```bash
+    xcodes select
+    ```
+
+    Run without arguments to pick interactively from a list of installed versions.
+  </Accordion>
+
+  <Accordion title="xcodes runtimes install requires root">
+    Some simulator runtimes are distributed in package format and must be installed as root:
+
+    ```bash
+    sudo xcodes runtimes install "iOS 16.4"
+    ```
+
+    Runtimes distributed as disk images or cryptex files do not require root and can be installed without `sudo`.
+
+    To check which format a runtime uses, run `xcodes runtimes` to list available runtimes before installing.
+  </Accordion>
+
+</AccordionGroup>

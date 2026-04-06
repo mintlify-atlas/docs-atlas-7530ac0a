@@ -1,0 +1,106 @@
+---
+title: "CI environments"
+description: "Use xcodes in GitHub Actions, Xcode Cloud, and other CI systems."
+---
+
+xcodes is well-suited to CI because it provides reproducible, scriptable Xcode management. The same commands you run locally work identically on a CI machine.
+
+## Prerequisites
+
+Before configuring your CI pipeline, make sure you have:
+
+- An Apple ID with access to the Apple Developer Program
+- Your Apple ID credentials stored as secrets in your CI system (not hardcoded in workflow files)
+- A `.xcode-version` file in your repository if you want to pin a version declaratively
+
+## Credentials
+
+xcodes reads credentials from environment variables in non-interactive environments:
+
+| Variable | Description |
+| --- | --- |
+| `XCODES_USERNAME` | Apple ID email address |
+| `XCODES_PASSWORD` | Apple ID password |
+
+Store these as encrypted secrets in your CI system and pass them to xcodes at runtime.
+
+## GitHub Actions
+
+### Install a specific version
+
+```yaml
+- name: Install xcodes
+  run: brew install xcodesorg/made/xcodes
+
+- name: Install Xcode
+  env:
+    XCODES_USERNAME: ${{ secrets.APPLE_ID }}
+    XCODES_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+  run: xcodes install 16.2 --select
+```
+
+### Use the .xcode-version file
+
+If your repository contains a `.xcode-version` file, xcodes reads it automatically:
+
+```yaml
+- name: Install xcodes
+  run: brew install xcodesorg/made/xcodes
+
+- name: Install and select Xcode from .xcode-version
+  env:
+    XCODES_USERNAME: ${{ secrets.APPLE_ID }}
+    XCODES_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+  run: |
+    xcodes install
+    xcodes select
+```
+
+### Always install the latest release
+
+```yaml
+- name: Install xcodes
+  run: brew install xcodesorg/made/xcodes
+
+- name: Install latest Xcode
+  env:
+    XCODES_USERNAME: ${{ secrets.APPLE_ID }}
+    XCODES_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+  run: xcodes install --latest --select
+```
+
+<Tip>
+GitHub-hosted macOS runners come with several Xcode versions pre-installed. xcodes is most useful when you need a specific version that isn't pre-installed, or when running on self-hosted runners where you control the environment.
+</Tip>
+
+## Tips for CI
+
+<AccordionGroup>
+  <Accordion title="Disable color output">
+    xcodes automatically disables ANSI color codes when not running in an interactive terminal. You can also force this explicitly:
+
+    ```bash
+    xcodes install 16.2 --no-color
+    # or
+    export NO_COLOR=1
+    ```
+  </Accordion>
+  <Accordion title="Use the default data source for reliability">
+    The default `xcodeReleases` data source is more stable than scraping Apple's website directly. Leave `--data-source` at its default unless you have a specific reason to change it.
+  </Accordion>
+  <Accordion title="Use fastlane spaceship auth when 2FA blocks automation">
+    If your Apple ID requires two-factor authentication and your CI system cannot handle interactive prompts, use a pre-generated fastlane session:
+
+    ```yaml
+    - name: Install Xcode with fastlane auth
+      env:
+        FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+      run: xcodes install 16.2 --select --use-fastlane-auth
+    ```
+
+    Generate `FASTLANE_SESSION` locally with `fastlane spaceauth -u you@example.com` and store the output as a secret. Note that spaceship sessions expire periodically and must be refreshed.
+  </Accordion>
+  <Accordion title="Cache downloaded archives">
+    xcodes caches downloaded `.xip` files in `~/Library/Application Support/xcodes/`. Configuring your CI system to cache this directory avoids re-downloading Xcode on every run.
+  </Accordion>
+</AccordionGroup>

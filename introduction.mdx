@@ -1,0 +1,53 @@
+---
+title: "Introduction"
+description: "xcodes is the best command-line tool to install and switch between multiple versions of Xcode."
+---
+
+xcodes makes it simple to manage every version of Xcode on your Mac — from stable releases to betas and GM seeds — all from a single command-line tool.
+
+## What is xcodes?
+
+xcodes is a Swift rewrite of the Ruby-based [`xcode-install`](https://github.com/xcpretty/xcode-install) tool. The rewrite was created specifically to eliminate the Ruby dependency, making xcodes faster to install, easier to distribute as a signed binary, and simpler to run on a clean Mac with no existing development environment.
+
+It authenticates with Apple's developer portal using your Apple ID, downloads the Xcode version you request, verifies it, and installs it to `/Applications` — all in one command.
+
+If you prefer a graphical interface, the companion [Xcodes.app](https://github.com/XcodesOrg/XcodesApp) provides the same functionality in a native Mac app.
+
+## Key features
+
+<CardGroup cols={2}>
+  <Card title="Install any Xcode version" icon="box-archive">
+    Install stable releases, betas, GM seeds, and release candidates by version number. You can also install from a local `.xip` file.
+  </Card>
+  <Card title="Switch between versions" icon="arrows-rotate">
+    Use `xcodes select` to change the active Xcode globally, or point it at a version number or path.
+  </Card>
+  <Card title="Fast downloads with aria2" icon="bolt">
+    When [aria2](https://aria2.github.io) is installed, xcodes uses up to 16 parallel connections to download Xcode 3–5x faster than a standard download.
+  </Card>
+  <Card title="Simulator runtime management" icon="mobile">
+    List, download, and install iOS, watchOS, tvOS, and visionOS simulator runtimes independently from Xcode.
+  </Card>
+  <Card title="Keychain credential storage" icon="key">
+    Your Apple ID password is stored securely in the macOS Keychain after first login, so you are not prompted again on subsequent runs.
+  </Card>
+  <Card title=".xcode-version file support" icon="file-code">
+    Commit a `.xcode-version` file to your repository so every team member and CI machine uses the same Xcode version automatically.
+  </Card>
+  <Card title="Shell completions" icon="terminal">
+    Generate tab-completion scripts for Zsh, Bash, and Fish to autocomplete commands and version numbers.
+  </Card>
+  <Card title="Security verification" icon="shield-check">
+    xcodes checks the security assessment and code signing of every downloaded Xcode before completing the installation.
+  </Card>
+</CardGroup>
+
+## Xcodes.app
+
+If you prefer a graphical interface, [Xcodes.app](https://github.com/XcodesOrg/XcodesApp) is a companion Mac app that provides the same core functionality — installing, switching, and managing Xcode versions — with a native macOS UI.
+
+## Next steps
+
+<Card title="Installation" icon="download" href="/installation">
+  Install xcodes on your Mac using Homebrew, Mint, or a direct download.
+</Card>

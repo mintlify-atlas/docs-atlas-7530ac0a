@@ -1,0 +1,56 @@
+---
+title: "list"
+description: "List all versions of Xcode that are available to install."
+---
+
+## Synopsis
+
+```bash
+xcodes list [options]
+```
+
+List all versions of Xcode available to install from the configured data source. Installed versions are marked in the output. The currently selected version is also indicated.
+
+xcodes caches the list of available versions locally. When the cache may be stale, `list` will refresh it automatically before displaying results. You can also refresh manually with [`xcodes update`](/commands/update).
+
+## Options
+
+| Flag | Description |
+|------|-------------|
+| `--directory <path>` | Directory to check for installed Xcode versions. Defaults to `/Applications`. Also reads the `XCODES_DIRECTORY` environment variable. |
+| `--data-source <source>` | Source for available Xcode versions. One of `apple` or `xcodeReleases`. Defaults to `xcodeReleases`. |
+| `--color` / `--no-color` | Enable or disable colored output. |
+
+## Sample output
+
+```
+14.3.1
+15.0
+15.1
+15.2
+15.4
+16.0
+16.1 (Installed)
+16.2 (Installed, Selected)
+16.3 Beta 2
+```
+
+## Listing only installed versions
+
+To list only the Xcode versions currently installed on your system, use `xcodes installed`:
+
+```bash
+xcodes installed
+```
+
+To print the path to a specific installed version, pass the version number as an argument:
+
+```bash
+xcodes installed 16.2
+```
+
+`xcodes installed` accepts the same `--directory` and `--color` / `--no-color` flags as `xcodes list`.
+
+<Tip>
+  Use `--data-source apple` if you want to pull directly from the Apple Developer website. This is more likely to show the very latest releases, but is more fragile if Apple changes their site layout.
+</Tip>
